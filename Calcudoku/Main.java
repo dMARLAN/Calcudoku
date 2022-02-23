@@ -42,9 +42,16 @@ public class Main {
 			cageObjects[i] = new Cage(cageParams.get(i).get(0), cageParams.get(i).get(1), cellPos);
 		}
 
-		SolverFuncs.getCages(cageObjects, numOfCages);
+		// Fill Puzzle
+		for ( int x = 0; x < GRID_SIZE; x++){
+			for ( int y = 0; y < GRID_SIZE; y++){
+				int add = (puzzle.get(x).get(y)) + 1;
+				puzzle.get(x).set(y,add);
+			}
+		}
+
+		// DEBUG
+		// SolverFuncs.getCages(cageObjects, numOfCages);
 
 	}
 }
-
-

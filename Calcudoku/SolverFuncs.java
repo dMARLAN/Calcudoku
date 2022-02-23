@@ -15,19 +15,35 @@ public class SolverFuncs {
 		}
 	}
 
+	// TODO
 	public static boolean checkValid(){
-		// TODO
+		boolean isValid = false;
+
+		cagesValid();
+		columnsValid();
+		rowsValid();
+
+		return isValid;
 	}
 
+	// TODO
 	public static boolean cagesValid(){
-		// TODO
+		boolean cageValid = false;
+
+		return cageValid;
 	}
 
+	// TODO
 	public static boolean columnsValid(){
-		// TODO
+		boolean columnValid = false;
+
+		return columnValid;
 	}
 
+	// TODO
 	public static boolean rowsValid(){
-		// TODO
+		boolean rowValid = false;
+
+		return rowValid;
 	}
 }
