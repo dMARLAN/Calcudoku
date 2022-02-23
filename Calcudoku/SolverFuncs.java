@@ -9,10 +9,25 @@ public class SolverFuncs {
 		return x;
 	}
 
-	public static void getCages(Cage[] cageObj){
-		for ( int i = 0; i < Main.numOfCages; i++){
+	public static void getCages(Cage[] cageObj, int numOfCages){
+		for ( int i = 0; i < numOfCages; i++){
 			cageObj[i].displayCageData(i);
 		}
+	}
 
+	public static boolean checkValid(){
+		// TODO
+	}
+
+	public static boolean cagesValid(){
+		// TODO
+	}
+
+	public static boolean columnsValid(){
+		// TODO
+	}
+
+	public static boolean rowsValid(){
+		// TODO
 	}
 }

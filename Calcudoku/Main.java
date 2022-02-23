@@ -3,12 +3,13 @@ import java.util.ArrayList;
 public class Main {
 
 	final static int GRID_SIZE = 5;
-	public static int numOfCages;
 
 	public static void main(String[] args){
 
 		// Get/Set Input
-		numOfCages = Integer.parseInt(SolverFuncs.myScanner("Input number of cages: "));
+		System.out.println();
+		int numOfCages = Integer.parseInt(SolverFuncs.myScanner("Input number of cages: "));
+		System.out.println();
 		ArrayList<ArrayList<Integer>> cageParams = new ArrayList<ArrayList<Integer>>();
 		for (int i = 0; i < numOfCages; i++){
 			String inputLine;
@@ -19,6 +20,7 @@ public class Main {
 				cageParams.get(i).add(Integer.parseInt(splitLine[j]));
 			}
 		}
+		System.out.println();
 
 		// Initialize Puzzle Cells
 		ArrayList<ArrayList<Integer>> puzzle = new ArrayList<ArrayList<Integer>>(GRID_SIZE);
@@ -27,7 +29,6 @@ public class Main {
 			for (int j = 0; j < GRID_SIZE; j++){
 				puzzle.get(i).add(0);
 			}
-
 		}
 
 		// Create Cage Objects
@@ -41,10 +42,9 @@ public class Main {
 			cageObjects[i] = new Cage(cageParams.get(i).get(0), cageParams.get(i).get(1), cellPos);
 		}
 
-		//SolverFuncs.getCages(cageObjects);
+		SolverFuncs.getCages(cageObjects, numOfCages);
 
 	}
-
 }
 
 
