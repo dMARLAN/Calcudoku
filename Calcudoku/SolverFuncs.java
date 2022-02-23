@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.io.IOException;
 
 public class SolverFuncs {
 
@@ -46,4 +47,5 @@ public class SolverFuncs {
 
 		return rowValid;
 	}
+
 }

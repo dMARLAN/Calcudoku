@@ -7,8 +7,13 @@ public class Main {
 	public static void main(String[] args){
 
 		// Get/Set Input
-		System.out.println();
-		int numOfCages = Integer.parseInt(SolverFuncs.myScanner("Input number of cages: "));
+		int numOfCages = 0;
+		try {
+			numOfCages = Integer.parseInt(SolverFuncs.myScanner("Input number of cages: "));
+		} catch (Exception e) {
+			System.out.println("ERR: Invalid Input");
+			System.exit(0);
+		}
 		System.out.println();
 		ArrayList<ArrayList<Integer>> cageParams = new ArrayList<ArrayList<Integer>>();
 		for (int i = 0; i < numOfCages; i++){
@@ -18,6 +23,10 @@ public class Main {
 			cageParams.add(new ArrayList<Integer>());
 			for (int j = 0; j < splitLine.length; j++){
 				cageParams.get(i).add(Integer.parseInt(splitLine[j]));
+			}
+			if (cageParams.get(i).get(1) != cageParams.get(i).size()-2){
+				System.out.println("ERR: Invalid Input");
+				System.exit(0);
 			}
 		}
 		System.out.println();
@@ -45,8 +54,8 @@ public class Main {
 		// Fill Puzzle
 		for ( int x = 0; x < GRID_SIZE; x++){
 			for ( int y = 0; y < GRID_SIZE; y++){
-				int add = (puzzle.get(x).get(y)) + 1;
-				puzzle.get(x).set(y,add);
+					int add = (puzzle.get(x).get(y)) + 1;
+					puzzle.get(x).set(y,add);
 			}
 		}
 
