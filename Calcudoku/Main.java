@@ -20,12 +20,12 @@ public class Main {
 		initializeIncrementalBoard();
 		createCages(numOfCages, cageParams);
 
-		SolverFuncs.solvePuzzle(puzzle, cages);
+		SolverFuncs.solvePuzzle(puzzle, cages, incrmBoard);
 
 		displayPuzzle();
 
 		System.out.println();
-		if(SolverFuncs.solvePuzzle(puzzle, cages)){
+		if(SolverFuncs.solvePuzzle(puzzle, cages, incrmBoard)){
 			System.out.println("Solved!");
 		} else {
 			System.out.println("Not Solved.");
@@ -142,7 +142,7 @@ public class Main {
 		for(int i = 0; i < Main.GRID_SIZE; i++){
 			for (int j = 0; j < Main.GRID_SIZE; j++){
 				if( (i == 0) && (j == 0)){
-					incrmBoard[i][j] = 1;
+					incrmBoard[i][j] = 0;
 				} else if (j == 0) {
 					incrmBoard[i][j] = incrmBoard[i-1][j+4]+1;
 				} else {
