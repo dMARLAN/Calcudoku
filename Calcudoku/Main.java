@@ -51,20 +51,14 @@ public class Main {
 			cageObjects[i] = new Cage(cageParams.get(i).get(0), cageParams.get(i).get(1), cellPos);
 		}
 
-		// Find total sum
-		int puzzleSum = 0;
-		for (int i = 0; i < cageParams.size(); i++){
-			puzzleSum += cageParams.get(i).get(0);
-		}
-
 		// Solve Puzzle
 		int x = 0;
 		int y = 0;
-		while(!SolverFuncs.isSolved()){
+		while(!SolverFuncs.isSolved(puzzle, cageObjects)){
 			for (x = 0; x < GRID_SIZE; x++){
 				for (y = 0; y < GRID_SIZE; y++){
 					incrementCell(x,y);
-					while(!SolverFuncs.checkValid(puzzle, x, y)){
+					while(!SolverFuncs.checkValid(puzzle, cageObjects)){
 						if(puzzle.get(x).get(y) < GRID_SIZE){
 							incrementCell(x,y);
 						} else {
