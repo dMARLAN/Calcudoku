@@ -78,14 +78,24 @@ public class SolverFuncs {
 
 	public static boolean rowsValid(ArrayList<ArrayList<Integer>> puzzle){
 		boolean rowsValid = false;
-		// If ArrayList is the same size as the HashSet, there are no duplicates.
 		for (int x = 0; x < Main.GRID_SIZE; x++){
-			HashSet<Integer> rowSet = new HashSet<Integer>(puzzle.get(x));
-			if(rowSet.size() == puzzle.get(x).size()){
+			HashSet<Integer> rowSet = new HashSet<Integer>();
+			ArrayList<Integer> rowAList = new ArrayList<Integer>();
+			// Build Row
+			for (int y = 0; y < Main.GRID_SIZE; y++){
+				if(puzzle.get(x).get(y) != 0){
+					rowAList.add(puzzle.get(x).get(y));
+					rowSet.add(puzzle.get(x).get(y));
+				}
+			}
+			//System.out.println("rowSet: " + rowSet);
+			//System.out.println("rowAList: " + rowAList);
+			if(rowSet.size() == rowAList.size()){
 				rowsValid = true;
 			} else {
 				rowsValid = false;
 			}
+			if(!rowsValid) break;
 		}
 		return rowsValid;
 	}
@@ -93,16 +103,23 @@ public class SolverFuncs {
 	public static boolean columnsValid(ArrayList<ArrayList<Integer>> puzzle){
 		boolean columnsValid = false;
 		for (int i = 0; i < Main.GRID_SIZE; i++){
+			ArrayList<Integer> columnAList = new ArrayList<Integer>();
+			HashSet<Integer> columnSet = new HashSet<Integer>();
+			// Build Column
 			for (int j = 0; j < Main.GRID_SIZE; j++){
-				ArrayList<Integer> columnAList = new ArrayList<Integer>();
-				columnAList.add(puzzle.get(j).get(i));
-				HashSet<Integer> columnSet = new HashSet<Integer>(columnAList);
-				if(columnSet.size() == columnAList.size()){
+				if(puzzle.get(j).get(i) != 0){
+					columnAList.add(puzzle.get(j).get(i));
+					columnSet.add(puzzle.get(j).get(i));
+				}
+				//System.out.println("columnSet: " + columnSet);
+				//System.out.println("columnAList: " + columnAList);
+			}
+			if(columnSet.size() == columnAList.size()){
 					columnsValid = true;
 				} else {
 					columnsValid = false;
-				}
 			}
+			if(!columnsValid) break;
 		}
 		return columnsValid;
 	}
@@ -125,8 +142,9 @@ public class SolverFuncs {
 		if (sumPuzzle == sumCages){
 			isSolved = true;
 			System.out.println("PUZZLE SOLVED :)!");
+			System.out.println("sumCages: " + sumCages);
+			System.out.println("sumPuzzle: " + sumPuzzle);
 		}
-
 		return isSolved;
 	}
 
