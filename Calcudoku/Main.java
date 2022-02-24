@@ -2,7 +2,8 @@ import java.util.ArrayList;
 
 public class Main {
 
-	final static int GRID_SIZE = 5;
+	public final static int GRID_SIZE = 5;
+	public static ArrayList<ArrayList<Integer>> puzzle = new ArrayList<ArrayList<Integer>>(GRID_SIZE);
 
 	public static void main(String[] args){
 
@@ -32,7 +33,6 @@ public class Main {
 		System.out.println();
 
 		// Initialize Puzzle Cells
-		ArrayList<ArrayList<Integer>> puzzle = new ArrayList<ArrayList<Integer>>(GRID_SIZE);
 		for (int i = 0; i < GRID_SIZE; i++){
 			puzzle.add(new ArrayList<Integer>());
 			for (int j = 0; j < GRID_SIZE; j++){
@@ -42,25 +42,54 @@ public class Main {
 
 		// Create Cage Objects
 		Cage[] cageObjects = new Cage[numOfCages];
-		for ( int i = 0; i < numOfCages; i++){
+		for (int i = 0; i < numOfCages; i++){
 			int numOfCells = cageParams.get(i).get(1);
 			int cellPos[] = new int[numOfCells];
-			for ( int j = 0; j < numOfCells; j++){
+			for (int j = 0; j < numOfCells; j++){
 				cellPos[j] = cageParams.get(i).get(j+2);
 			}
 			cageObjects[i] = new Cage(cageParams.get(i).get(0), cageParams.get(i).get(1), cellPos);
 		}
 
-		// Fill Puzzle
-		for ( int x = 0; x < GRID_SIZE; x++){
-			for ( int y = 0; y < GRID_SIZE; y++){
-					int add = (puzzle.get(x).get(y)) + 1;
-					puzzle.get(x).set(y,add);
+		// Find total sum
+		int puzzleSum = 0;
+		for (int i = 0; i < cageParams.size(); i++){
+			puzzleSum += cageParams.get(i).get(0);
+		}
+
+		// Solve Puzzle
+		int x = 0;
+		int y = 0;
+		while(!SolverFuncs.isSolved()){
+			for (x = 0; x < GRID_SIZE; x++){
+				for (y = 0; y < GRID_SIZE; y++){
+					incrementCell(x,y);
+					while(!SolverFuncs.checkValid(puzzle, x, y)){
+						if(puzzle.get(x).get(y) < GRID_SIZE){
+							incrementCell(x,y);
+						} else {
+							puzzle.get(x).set(y,0);
+							y = y-2;
+						}
+					}
+				}
 			}
 		}
 
-		// DEBUG
-		// SolverFuncs.getCages(cageObjects, numOfCages);
 
+	}
+
+	public static void incrementCell(int x, int y){
+		puzzle.get(x).set(y,1);
+	}
+
+	public static void displayPuzzle(){
+		System.out.println();
+		for ( int x = 0; x < GRID_SIZE; x++){
+			for ( int y = 0; y < GRID_SIZE; y++){
+				System.out.print(puzzle.get(x).get(y));
+			}
+			System.out.println();
+		}
 	}
 }
