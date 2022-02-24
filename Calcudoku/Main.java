@@ -24,13 +24,14 @@ public class Main {
 
 		displayPuzzle();
 
-		System.out.println();
 		if(SolverFuncs.solvePuzzle(puzzle, cages, incrmBoard)){
 			System.out.println("Solved!");
 		} else {
 			System.out.println("Not Solved.");
 		}
 
+		System.out.println();
+		System.out.println("-- Inputs --");
 		SolverFuncs.getCages(cages);
 		System.out.println("Checks: " + SolverFuncs.checks);
 		System.out.println("Backtracks: " + SolverFuncs.backtracks);

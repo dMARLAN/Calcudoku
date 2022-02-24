@@ -97,8 +97,8 @@ public class SolverFuncs {
 			for (int column = 0; column < Main.GRID_SIZE; column++){
 				if(puzzle[row][column] == 0){
 					for (int checkNumber = 1; checkNumber <= Main.GRID_SIZE; checkNumber++){
+						checks++;
 						if(checkValid(puzzle, cages, row, column, checkNumber, incrmBoard)){
-							checks++;
 							puzzle[row][column] = checkNumber;
 							if(solvePuzzle(puzzle, cages, incrmBoard)){
 								return true;
