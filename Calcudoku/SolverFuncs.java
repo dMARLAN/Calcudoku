@@ -4,9 +4,9 @@ import java.util.HashSet;
 
 public class SolverFuncs {
 
-	public static String myScanner(String question){
+	public static String myScanner(String input){
 		Scanner myScanner = new Scanner(System.in);
-		System.out.print(question);
+		System.out.print(input);
 		String x = myScanner.nextLine();
 		return x;
 	}
@@ -17,15 +17,14 @@ public class SolverFuncs {
 		}
 	}
 
-	public static boolean checkValid(ArrayList<ArrayList<Integer>> puzzle, Cage[] cageObj){
-		boolean isValid = false;
-		if ( cagesValid(puzzle, cageObj) && rowsValid(puzzle) && columnsValid(puzzle) ){
-			isValid = true;
-		}
-		return isValid;
+	public static boolean checkValid(int[][] puzzle, Cage[] cageObj, int row, int column, int checkNumber){
+		return !rowsValid(puzzle, row, checkNumber) &&
+        !columnsValid(puzzle, column, checkNumber);
+
+        //!cagesValid(puzzle, cageObjects);
 	}
 	
-	public static boolean cagesValid(ArrayList<ArrayList<Integer>> puzzle, Cage[] cageObj){
+	/*public static boolean cagesValid(int[][] puzzle, Cage[] cageObjects){
 		int[][] cageIndex = new int[Main.GRID_SIZE][Main.GRID_SIZE];
 
 		// Create incremental array for comparison to.
@@ -41,8 +40,8 @@ public class SolverFuncs {
 			}
 		}
 		
-		for (int i = 0; i < cageObj.length; i++){
-			int cellPosLength = cageObj[i].cellPos.length;
+		for (int i = 0; i < cageObjects.length; i++){
+			int cellPosLength = cageObjects[i].cellPos.length;
 			int[] cellX = new int[cellPosLength];
 			int[] cellY = new int[cellPosLength];
 			int cellSum = 0;
@@ -50,7 +49,7 @@ public class SolverFuncs {
 				// Get puzzle index from incremental indentifier.
 				for (int x = 0; x < Main.GRID_SIZE; x++){
 					for (int y = 0; y < Main.GRID_SIZE; y++){
-						if (cageObj[i].cellPos[j] == cageIndex[x][y]){
+						if (cageObjects[i].cellPos[j] == cageIndex[x][y]){
 							cellX[j] = x;
 							cellY[j] = y;
 						}
@@ -63,9 +62,9 @@ public class SolverFuncs {
 						count += 1;
 					}
 				}
-				if((count == cellPosLength) & (cellSum == cageObj[i].cageSum)){
+				if((count == cellPosLength) & (cellSum == cageObjects[i].cageSum)){
 					return true;
-				} else if ((count < cellPosLength) & (cellSum < cageObj[i].cageSum)) {
+				} else if ((count < cellPosLength) & (cellSum < cageObjects[i].cageSum)) {
 					return true;
 				} else {
 					return false;
@@ -73,47 +72,54 @@ public class SolverFuncs {
 			}
 		}
 		return false;
-	}	
+	}*/
 
-	public static boolean rowsValid(ArrayList<ArrayList<Integer>> puzzle, int row, int number){
+	public static boolean rowsValid(int[][] puzzle, int row, int checkNumber){
 		for (int i = 0; i < Main.GRID_SIZE; i++){
-			if(puzzle.get(row).get(i) == number){
+			if(puzzle[row][i] == checkNumber){
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public static boolean columnsValid(ArrayList<ArrayList<Integer>> puzzle, int column, int number){
+	public static boolean columnsValid(int[][] puzzle, int column, int checkNumber){
 		for (int i = 0; i < Main.GRID_SIZE; i++){
-			if(puzzle.get(i).get(column) == number){
+			if(puzzle[i][column] == checkNumber){
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public static boolean isSolved(ArrayList<ArrayList<Integer>> puzzle, Cage[] cageObj){
-		int sumPuzzle = 0;
-		int sumCages = 0;
+	public static boolean solvePuzzle(int[][] puzzle, Cage[] cageObjects){
+		for (int row = 0; row < Main.GRID_SIZE; row++){
+			for (int column = 0; column < Main.GRID_SIZE; column++){
+				if(puzzle[row][column] == 0){
+					for (int checkNumber = 1; checkNumber <= Main.GRID_SIZE; checkNumber++){
+						if(checkValid(puzzle, cageObjects, row, column, checkNumber)){
+							puzzle[row][column] = checkNumber;
 
-		for (int x = 0; x < Main.GRID_SIZE; x++){
-			for (int y = 0; y < Main.GRID_SIZE; y++){
-				sumPuzzle += puzzle.get(x).get(y);
+							System.out.println();
+							System.out.println("=== Puzzle ===");
+							for(int i = 0; i < Main.GRID_SIZE; i++){
+								for(int j = 0; j < Main.GRID_SIZE; j++){
+									System.out.print(puzzle[i][j]);
+								}
+								System.out.println();
+							}
+
+							if(solvePuzzle(puzzle, cageObjects)){
+								return true;
+							} else {
+								puzzle[row][column] = 0;
+							}
+						}
+					}
+					return false;
+				}
 			}
 		}
-
-		for (int x = 0; x < cageObj.length; x++){
-			sumCages += cageObj[x].cageSum;
-		}
-
-		if (sumPuzzle == sumCages){
-			System.out.println("PUZZLE SOLVED :)!");
-			System.out.println("sumCages: " + sumCages);
-			System.out.println("sumPuzzle: " + sumPuzzle);
-			return true;
-		}
-		return false;
+		return true;
 	}
-
 }

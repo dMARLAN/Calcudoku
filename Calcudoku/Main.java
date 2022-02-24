@@ -2,21 +2,116 @@ import java.util.ArrayList;
 
 public class Main {
 
+	// VARS
 	public final static int GRID_SIZE = 5;
-	public static ArrayList<ArrayList<Integer>> puzzle = new ArrayList<ArrayList<Integer>>(GRID_SIZE);
+	public static int[][] puzzle = new int[GRID_SIZE][GRID_SIZE];
+	public static int numOfCages = 0;
+	public static ArrayList<ArrayList<Integer>> cageParams = new ArrayList<ArrayList<Integer>>();
+	public static Cage[] cageObjects;
+	///////
 
 	public static void main(String[] args){
 
-		// Get/Set Input
-		int numOfCages = 0;
-		try {
-			numOfCages = Integer.parseInt(SolverFuncs.myScanner("Input number of cages: "));
-		} catch (Exception e) {
-			System.out.println("ERR: Invalid Input");
-			System.exit(0);
-		}
+		//getInputs();
+		setInputsDebug();
+
+		initializePuzzle();
+
+		createCages(numOfCages, cageParams);
+
+		SolverFuncs.solvePuzzle(puzzle, cageObjects);
+
+		displayPuzzle();
+
+		if(SolverFuncs.solvePuzzle(puzzle, cageObjects)){
+			System.out.println("Solved!");
+		} else {
+			System.out.println("Not Solved.");
+		}		
+
+	}
+
+	public static void displayPuzzle(){
 		System.out.println();
-		ArrayList<ArrayList<Integer>> cageParams = new ArrayList<ArrayList<Integer>>();
+		System.out.println("=== Puzzle ===");
+		for(int i = 0; i < GRID_SIZE; i++){
+			for(int j = 0; j < GRID_SIZE; j++){
+				System.out.print(puzzle[i][j]);
+			}
+			System.out.println();
+		}
+	}
+
+	public static void setInputsDebug(){
+		numOfCages = 9;
+
+		cageParams.add(new ArrayList<Integer>());
+		cageParams.get(0).add(9);
+		cageParams.get(0).add(3);
+		cageParams.get(0).add(0);
+		cageParams.get(0).add(5);
+		cageParams.get(0).add(6);
+
+		cageParams.add(new ArrayList<Integer>());
+		cageParams.get(1).add(7);
+		cageParams.get(1).add(2);
+		cageParams.get(1).add(1);
+		cageParams.get(1).add(2);
+		
+		cageParams.add(new ArrayList<Integer>());
+		cageParams.get(2).add(10);
+		cageParams.get(2).add(3);
+		cageParams.get(2).add(3);
+		cageParams.get(2).add(8);
+		cageParams.get(2).add(13);
+
+		cageParams.add(new ArrayList<Integer>());
+		cageParams.get(3).add(14);
+		cageParams.get(3).add(4);
+		cageParams.get(3).add(4);
+		cageParams.get(3).add(9);
+		cageParams.get(3).add(14);
+		cageParams.get(3).add(19);
+
+		cageParams.add(new ArrayList<Integer>());
+		cageParams.get(4).add(3);
+		cageParams.get(4).add(1);
+		cageParams.get(4).add(7);
+
+		cageParams.add(new ArrayList<Integer>());
+		cageParams.get(5).add(8);
+		cageParams.get(5).add(3);
+		cageParams.get(5).add(10);
+		cageParams.get(5).add(11);
+		cageParams.get(5).add(16);
+
+		cageParams.add(new ArrayList<Integer>());
+		cageParams.get(6).add(13);
+		cageParams.get(6).add(4);
+		cageParams.get(6).add(12);
+		cageParams.get(6).add(17);
+		cageParams.get(6).add(21);
+		cageParams.get(6).add(22);
+
+		cageParams.add(new ArrayList<Integer>());
+		cageParams.get(7).add(5);
+		cageParams.get(7).add(2);
+		cageParams.get(7).add(15);
+		cageParams.get(7).add(20);
+
+		cageParams.add(new ArrayList<Integer>());
+		cageParams.get(8).add(6);
+		cageParams.get(8).add(3);
+		cageParams.get(8).add(18);
+		cageParams.get(8).add(23);
+		cageParams.get(8).add(24);
+
+		cageObjects = new Cage[numOfCages];
+	}
+
+	public static void getInputs(){
+		numOfCages = Integer.parseInt(SolverFuncs.myScanner("Input number of cages: "));
+		System.out.println();
 		for (int i = 0; i < numOfCages; i++){
 			String inputLine;
 			inputLine = SolverFuncs.myScanner("Input line " + (i+1) + ": ");
@@ -25,23 +120,20 @@ public class Main {
 			for (int j = 0; j < splitLine.length; j++){
 				cageParams.get(i).add(Integer.parseInt(splitLine[j]));
 			}
-			if (cageParams.get(i).get(1) != cageParams.get(i).size()-2){
-				System.out.println("ERR: Invalid Input");
-				System.exit(0);
-			}
 		}
 		System.out.println();
+		cageObjects = new Cage[numOfCages];
+	}
 
-		// Initialize Puzzle Cells
+	public static void initializePuzzle(){
 		for (int i = 0; i < GRID_SIZE; i++){
-			puzzle.add(new ArrayList<Integer>());
 			for (int j = 0; j < GRID_SIZE; j++){
-				puzzle.get(i).add(0);
+				puzzle[i][j] = 0;
 			}
 		}
+	}
 
-		// Create Cage Objects
-		Cage[] cageObjects = new Cage[numOfCages];
+	public static void createCages(int numOfCages, ArrayList<ArrayList<Integer>> cageParams){
 		for (int i = 0; i < numOfCages; i++){
 			int numOfCells = cageParams.get(i).get(1);
 			int cellPos[] = new int[numOfCells];
@@ -49,49 +141,6 @@ public class Main {
 				cellPos[j] = cageParams.get(i).get(j+2);
 			}
 			cageObjects[i] = new Cage(cageParams.get(i).get(0), cageParams.get(i).get(1), cellPos);
-		}
-
-		// Solve Puzzle
-		int x = 0;
-		int y = 0;
-		for (x = 0; x < GRID_SIZE; x=x){
-			for (y = 0; y < GRID_SIZE; y=y){
-				incrementCell(x, y);
-				displayPuzzle();
-				if(SolverFuncs.checkValid(puzzle,cageObjects)){
-					if(y == 4){
-						x++;
-						y=0;
-					} else {
-						y++;
-					}
-				} else {
-					if(puzzle.get(x).get(y) >= GRID_SIZE){
-						puzzle.get(x).set(y,0);
-						if( y == 0 ){
-							x = x-1;
-							y = 4;
-						} else {
-							y = y-1;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	public static void incrementCell(int x, int y){
-		int a = puzzle.get(x).get(y)+1;
-		puzzle.get(x).set(y,a);
-	}
-
-	public static void displayPuzzle(){
-		System.out.println(" displayPuzzle: ");
-		for ( int x = 0; x < GRID_SIZE; x++){
-			for ( int y = 0; y < GRID_SIZE; y++){
-				System.out.print(puzzle.get(x).get(y));
-			}
-			System.out.println();
 		}
 	}
 }
