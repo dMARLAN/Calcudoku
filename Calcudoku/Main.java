@@ -7,7 +7,8 @@ public class Main {
 	public static int[][] puzzle = new int[GRID_SIZE][GRID_SIZE];
 	public static int numOfCages = 0;
 	public static ArrayList<ArrayList<Integer>> cageParams = new ArrayList<ArrayList<Integer>>();
-	public static Cage[] cageObjects;
+	public static Cage[] cages;
+	public static int[][] incrmBoard = new int[Main.GRID_SIZE][Main.GRID_SIZE];
 	///////
 
 	public static void main(String[] args){
@@ -16,28 +17,32 @@ public class Main {
 		setInputsDebug();
 
 		initializePuzzle();
-
+		initializeIncrementalBoard();
 		createCages(numOfCages, cageParams);
 
-		SolverFuncs.solvePuzzle(puzzle, cageObjects);
+		SolverFuncs.solvePuzzle(puzzle, cages);
 
 		displayPuzzle();
 
-		if(SolverFuncs.solvePuzzle(puzzle, cageObjects)){
+		System.out.println();
+		if(SolverFuncs.solvePuzzle(puzzle, cages)){
 			System.out.println("Solved!");
 		} else {
 			System.out.println("Not Solved.");
-		}		
+		}
+
+		SolverFuncs.getCages(cages);	
 
 	}
 
 	public static void displayPuzzle(){
 		System.out.println();
-		System.out.println("=== Puzzle ===");
+		System.out.println("== Puzzle ==");
 		for(int i = 0; i < GRID_SIZE; i++){
 			for(int j = 0; j < GRID_SIZE; j++){
-				System.out.print(puzzle[i][j]);
+				System.out.print(puzzle[i][j]+"  ");
 			}
+			System.out.println();
 			System.out.println();
 		}
 	}
@@ -106,7 +111,7 @@ public class Main {
 		cageParams.get(8).add(23);
 		cageParams.get(8).add(24);
 
-		cageObjects = new Cage[numOfCages];
+		cages = new Cage[numOfCages];
 	}
 
 	public static void getInputs(){
@@ -122,7 +127,7 @@ public class Main {
 			}
 		}
 		System.out.println();
-		cageObjects = new Cage[numOfCages];
+		cages = new Cage[numOfCages];
 	}
 
 	public static void initializePuzzle(){
@@ -133,6 +138,21 @@ public class Main {
 		}
 	}
 
+	public static void initializeIncrementalBoard(){
+		for(int i = 0; i < Main.GRID_SIZE; i++){
+			for (int j = 0; j < Main.GRID_SIZE; j++){
+				if( (i == 0) && (j == 0)){
+					incrmBoard[i][j] = 1;
+				} else if (j == 0) {
+					incrmBoard[i][j] = incrmBoard[i-1][j+4]+1;
+				} else {
+					incrmBoard[i][j] = incrmBoard[i][j-1]+1;
+				}
+			}
+		}	
+	}
+	
+
 	public static void createCages(int numOfCages, ArrayList<ArrayList<Integer>> cageParams){
 		for (int i = 0; i < numOfCages; i++){
 			int numOfCells = cageParams.get(i).get(1);
@@ -140,7 +160,7 @@ public class Main {
 			for (int j = 0; j < numOfCells; j++){
 				cellPos[j] = cageParams.get(i).get(j+2);
 			}
-			cageObjects[i] = new Cage(cageParams.get(i).get(0), cageParams.get(i).get(1), cellPos);
+			cages[i] = new Cage(cageParams.get(i).get(0), cageParams.get(i).get(1), cellPos);
 		}
 	}
 }

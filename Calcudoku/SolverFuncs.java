@@ -11,68 +11,29 @@ public class SolverFuncs {
 		return x;
 	}
 
-	public static void getCages(Cage[] cageObj, int numOfCages){
-		for ( int i = 0; i < numOfCages; i++){
-			cageObj[i].displayCageData(i);
+	public static void getCages(Cage[] cages){
+		System.out.println();
+		for ( int c = 0; c < cages.length; c++){
+			cages[c].displayCageData(c);
 		}
 	}
 
-	public static boolean checkValid(int[][] puzzle, Cage[] cageObj, int row, int column, int checkNumber){
+	public static boolean checkValid(int[][] puzzle, Cage[] cages, int row, int column, int checkNumber){
 		return !rowsValid(puzzle, row, checkNumber) &&
-        !columnsValid(puzzle, column, checkNumber);
-
-        //!cagesValid(puzzle, cageObjects);
+        !columnsValid(puzzle, column, checkNumber) &&
+		!cagesValid(puzzle, cages);
 	}
 	
-	/*public static boolean cagesValid(int[][] puzzle, Cage[] cageObjects){
-		int[][] cageIndex = new int[Main.GRID_SIZE][Main.GRID_SIZE];
+	public static boolean cagesValid(int[][] puzzle, Cage[] cages){
 
-		// Create incremental array for comparison to.
-		for(int i = 0; i < Main.GRID_SIZE; i++){
-			for (int j = 0; j < Main.GRID_SIZE; j++){
-				if( (i == 0) && (j == 0)){
-					cageIndex[i][j] = 1;
-				} else if (j == 0) {
-					cageIndex[i][j] = cageIndex[i-1][j+4]+1;
-				} else {
-					cageIndex[i][j] = cageIndex[i][j-1]+1;
-				}
-			}
+		for(int c = 0; c < Main.GRID_SIZE; c++){
+			int numberOfCells = cages[c].numberOfCells;
+			int cellSum = cages[c].cageSum;
+			int[] cellPos = cages[c].cellPos;
 		}
 		
-		for (int i = 0; i < cageObjects.length; i++){
-			int cellPosLength = cageObjects[i].cellPos.length;
-			int[] cellX = new int[cellPosLength];
-			int[] cellY = new int[cellPosLength];
-			int cellSum = 0;
-			for (int j = 0; j < cellPosLength; j++){
-				// Get puzzle index from incremental indentifier.
-				for (int x = 0; x < Main.GRID_SIZE; x++){
-					for (int y = 0; y < Main.GRID_SIZE; y++){
-						if (cageObjects[i].cellPos[j] == cageIndex[x][y]){
-							cellX[j] = x;
-							cellY[j] = y;
-						}
-					}		
-				}
-				cellSum = cellSum + puzzle.get(cellX[j]).get(cellY[j]);
-				int count = 0;
-				for (int x = 0; x < cellPosLength; x++){
-					if (puzzle.get(cellX[j]).get(cellY[j]) > 0){
-						count += 1;
-					}
-				}
-				if((count == cellPosLength) & (cellSum == cageObjects[i].cageSum)){
-					return true;
-				} else if ((count < cellPosLength) & (cellSum < cageObjects[i].cageSum)) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		}
 		return false;
-	}*/
+	}
 
 	public static boolean rowsValid(int[][] puzzle, int row, int checkNumber){
 		for (int i = 0; i < Main.GRID_SIZE; i++){
@@ -92,24 +53,24 @@ public class SolverFuncs {
 		return false;
 	}
 
-	public static boolean solvePuzzle(int[][] puzzle, Cage[] cageObjects){
+	public static boolean solvePuzzle(int[][] puzzle, Cage[] cages){
 		for (int row = 0; row < Main.GRID_SIZE; row++){
 			for (int column = 0; column < Main.GRID_SIZE; column++){
 				if(puzzle[row][column] == 0){
 					for (int checkNumber = 1; checkNumber <= Main.GRID_SIZE; checkNumber++){
-						if(checkValid(puzzle, cageObjects, row, column, checkNumber)){
+						if(checkValid(puzzle, cages, row, column, checkNumber)){
 							puzzle[row][column] = checkNumber;
 
-							System.out.println();
+							/*System.out.println();
 							System.out.println("=== Puzzle ===");
 							for(int i = 0; i < Main.GRID_SIZE; i++){
 								for(int j = 0; j < Main.GRID_SIZE; j++){
 									System.out.print(puzzle[i][j]);
 								}
 								System.out.println();
-							}
+							}*/
 
-							if(solvePuzzle(puzzle, cageObjects)){
+							if(solvePuzzle(puzzle, cages)){
 								return true;
 							} else {
 								puzzle[row][column] = 0;
