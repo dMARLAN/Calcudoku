@@ -12,7 +12,7 @@ public class Cage {
 	}
 
 	public void displayCageData(int cageNum){
-		System.out.println("Cage " +cageNum+ ": Sum = " +cageSum+ ", Cells = " +numberOfCells+ ", Positions = " + Arrays.toString(cellPos));
+		System.out.println("   Cage " +cageNum+ ": Sum = " +cageSum+ ", Cells = " +numberOfCells+ ", Positions = " + Arrays.toString(cellPos));
 	}
 
 }

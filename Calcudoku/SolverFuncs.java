@@ -1,6 +1,4 @@
 import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.HashSet;
 
 public class SolverFuncs {
 
@@ -21,13 +19,13 @@ public class SolverFuncs {
 		}
 	}
 
-	public static boolean checkValid(int[][] puzzle, Cage[] cages, int row, int column, int checkNumber, int[][] incrmBoard){
+	private static boolean checkValid(int[][] puzzle, Cage[] cages, int row, int column, int checkNumber, int[][] incrmBoard){
 		return !rowsValid(puzzle, row, checkNumber) &&
         !columnsValid(puzzle, column, checkNumber) &&
 		!cagesValid(puzzle, cages, incrmBoard);
 	}
 	
-	public static boolean cagesValid(int[][] puzzle, Cage[] cages, int[][] incrmBoard){
+	private static boolean cagesValid(int[][] puzzle, Cage[] cages, int[][] incrmBoard){
 
 		for(int c = 0; c < cages.length; c++){
 			int numberOfCells = cages[c].numberOfCells;
@@ -74,7 +72,7 @@ public class SolverFuncs {
 		return false;
 	}
 
-	public static boolean rowsValid(int[][] puzzle, int row, int checkNumber){
+	private static boolean rowsValid(int[][] puzzle, int row, int checkNumber){
 		for (int i = 0; i < Main.GRID_SIZE; i++){
 			if(puzzle[row][i] == checkNumber){
 				return true;
@@ -83,7 +81,7 @@ public class SolverFuncs {
 		return false;
 	}
 
-	public static boolean columnsValid(int[][] puzzle, int column, int checkNumber){
+	private static boolean columnsValid(int[][] puzzle, int column, int checkNumber){
 		for (int i = 0; i < Main.GRID_SIZE; i++){
 			if(puzzle[i][column] == checkNumber){
 				return true;

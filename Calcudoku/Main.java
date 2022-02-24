@@ -12,9 +12,18 @@ public class Main {
 	///////
 
 	public static void main(String[] args){
-
-		//getInputs();
-		setInputsDebug();
+		System.out.println();
+		System.out.println("  ================================");
+		System.out.println("  C A L C U D O K U - S O L V E R");
+		System.out.println("  ================================");
+		System.out.println();
+		System.out.println("   Manual Inputs (1)");
+		int inputChoice = Integer.parseInt(SolverFuncs.myScanner("   or Default Inputs (2)?: "));
+		if (inputChoice == 1){
+			getInputs();
+		} else {
+			setDefaultInputs();
+		}
 
 		initializePuzzle();
 		initializeIncrementalBoard();
@@ -25,23 +34,24 @@ public class Main {
 		displayPuzzle();
 
 		if(SolverFuncs.solvePuzzle(puzzle, cages, incrmBoard)){
-			System.out.println("Solved!");
+			System.out.println("   SOLVED!");
 		} else {
-			System.out.println("Not Solved.");
+			System.out.println("   Not Solved.");
 		}
-
 		System.out.println();
-		System.out.println("-- Inputs --");
+
+		System.out.print("   == Inputs == ");
 		SolverFuncs.getCages(cages);
-		System.out.println("Checks: " + SolverFuncs.checks);
-		System.out.println("Backtracks: " + SolverFuncs.backtracks);
+		System.out.print("   Checks: " + SolverFuncs.checks);
+		System.out.println("   Backtracks: " + SolverFuncs.backtracks);
 	}
 
 	public static void displayPuzzle(){
 		System.out.println();
-		System.out.println("== Solution ==");
+		System.out.println("   == Solution ==");
 		for(int i = 0; i < GRID_SIZE; i++){
 			for(int j = 0; j < GRID_SIZE; j++){
+				if(j == 0) System.out.print("   ");
 				System.out.print(puzzle[i][j]+"  ");
 			}
 			System.out.println();
@@ -49,7 +59,7 @@ public class Main {
 		}
 	}
 
-	public static void setInputsDebug(){
+	public static void setDefaultInputs(){
 		numOfCages = 9;
 
 		cageParams.add(new ArrayList<Integer>());
@@ -117,11 +127,11 @@ public class Main {
 	}
 
 	public static void getInputs(){
-		numOfCages = Integer.parseInt(SolverFuncs.myScanner("Input number of cages: "));
+		numOfCages = Integer.parseInt(SolverFuncs.myScanner("   Input number of cages: "));
 		System.out.println();
 		for (int i = 0; i < numOfCages; i++){
 			String inputLine;
-			inputLine = SolverFuncs.myScanner("Input line " + (i+1) + ": ");
+			inputLine = SolverFuncs.myScanner("   Input line " + (i+1) + ": ");
 			String[] splitLine = inputLine.split(" ");
 			cageParams.add(new ArrayList<Integer>());
 			for (int j = 0; j < splitLine.length; j++){
