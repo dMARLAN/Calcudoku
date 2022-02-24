@@ -54,28 +54,25 @@ public class Main {
 		// Solve Puzzle
 		int x = 0;
 		int y = 0;
-		while(!SolverFuncs.isSolved(puzzle, cageObjects)){
-			for (x = 0; x < GRID_SIZE; x++){
-				for (y = 0; y < GRID_SIZE; y++){
-					incrementCell(x, y);
-					while(!SolverFuncs.checkValid(puzzle, cageObjects)){
-						displayPuzzle();
-						//System.out.println("Puzzle Valid: " + SolverFuncs.checkValid(puzzle, cageObjects));
-						//System.out.println("Rows Valid: " + SolverFuncs.rowsValid(puzzle));
-						//System.out.println("Columns Valid: " + SolverFuncs.columnsValid(puzzle));
-						//System.out.println("Cages Valid: " + SolverFuncs.cagesValid(puzzle, cageObjects));
-						incrementCell(x, y);
-						//System.out.print(" x: " + x);
-						//System.out.print(" y: " + y);
-						// Backtrack, Set Cell to 0
-						if(puzzle.get(x).get(y) > GRID_SIZE){
-							puzzle.get(x).set(y,0);
-							if( y == 0 ){
-								x = x-1;
-								y = 4;
-							} else {
-								y = y-2;
-							}
+		for (x = 0; x < GRID_SIZE; x=x){
+			for (y = 0; y < GRID_SIZE; y=y){
+				incrementCell(x, y);
+				displayPuzzle();
+				if(SolverFuncs.checkValid(puzzle,cageObjects)){
+					if(y == 4){
+						x++;
+						y=0;
+					} else {
+						y++;
+					}
+				} else {
+					if(puzzle.get(x).get(y) >= GRID_SIZE){
+						puzzle.get(x).set(y,0);
+						if( y == 0 ){
+							x = x-1;
+							y = 4;
+						} else {
+							y = y-1;
 						}
 					}
 				}
