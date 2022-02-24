@@ -31,13 +31,14 @@ public class Main {
 			System.out.println("Not Solved.");
 		}
 
-		SolverFuncs.getCages(cages);	
-
+		SolverFuncs.getCages(cages);
+		System.out.println("Checks: " + SolverFuncs.checks);
+		System.out.println("Backtracks: " + SolverFuncs.backtracks);
 	}
 
 	public static void displayPuzzle(){
 		System.out.println();
-		System.out.println("== Puzzle ==");
+		System.out.println("== Solution ==");
 		for(int i = 0; i < GRID_SIZE; i++){
 			for(int j = 0; j < GRID_SIZE; j++){
 				System.out.print(puzzle[i][j]+"  ");

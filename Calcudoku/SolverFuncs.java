@@ -4,6 +4,9 @@ import java.util.HashSet;
 
 public class SolverFuncs {
 
+	public static int checks = 0;
+	public static int backtracks = 0;
+
 	public static String myScanner(String input){
 		Scanner myScanner = new Scanner(System.in);
 		System.out.print(input);
@@ -26,7 +29,7 @@ public class SolverFuncs {
 	
 	public static boolean cagesValid(int[][] puzzle, Cage[] cages, int[][] incrmBoard){
 
-		for(int c = 0; c < Main.GRID_SIZE; c++){
+		for(int c = 0; c < cages.length; c++){
 			int numberOfCells = cages[c].numberOfCells;
 			int cageSum = cages[c].cageSum;
 			int[] cellPos = cages[c].cellPos;
@@ -95,20 +98,13 @@ public class SolverFuncs {
 				if(puzzle[row][column] == 0){
 					for (int checkNumber = 1; checkNumber <= Main.GRID_SIZE; checkNumber++){
 						if(checkValid(puzzle, cages, row, column, checkNumber, incrmBoard)){
+							checks++;
 							puzzle[row][column] = checkNumber;
-
-							/*System.out.println();
-							System.out.println("=== Puzzle ===");
-							for(int i = 0; i < Main.GRID_SIZE; i++){
-								for(int j = 0; j < Main.GRID_SIZE; j++){
-									System.out.print(puzzle[i][j]);
-								}
-								System.out.println();
-							}*/
 							if(solvePuzzle(puzzle, cages, incrmBoard)){
 								return true;
 							} else {
 								puzzle[row][column] = 0;
+								backtracks++;
 							}
 						}
 					}
