@@ -1,115 +1,105 @@
-import java.util.Scanner;
 
 public class SolverFuncs {
 
 	public static int checks = 0;
 	public static int backtracks = 0;
 
-	public static String myScanner(String input){
-		Scanner myScanner = new Scanner(System.in);
-		System.out.print(input);
-		String x = myScanner.nextLine();
-		return x;
-	}
-
-	public static void getCages(Cage[] cages){
-		System.out.println();
-		for ( int c = 0; c < cages.length; c++){
-			cages[c].displayCageData(c);
-		}
-	}
-
 	private static boolean checkValid(int[][] puzzle, Cage[] cages, int row, int column, int checkNumber, int[][] incrmBoard){
-		return !rowsValid(puzzle, row, checkNumber) &&
-        !columnsValid(puzzle, column, checkNumber) &&
-		!cagesValid(puzzle, cages, incrmBoard);
+		return checkRowsValid(puzzle, row, checkNumber) &&
+        checkColumnsValid(puzzle, column, checkNumber) &&
+		checkCagesValid(puzzle, cages, row, column, checkNumber, incrmBoard);
 	}
 	
-	private static boolean cagesValid(int[][] puzzle, Cage[] cages, int[][] incrmBoard){
-
-		for(int c = 0; c < cages.length; c++){
-			int numberOfCells = cages[c].numberOfCells;
-			int cageSum = cages[c].cageSum;
-			int[] cellPos = cages[c].cellPos;
-			int cageActualSum = 0;
-			int cellOccupied = 0;
-
-			for(int cell = 0; cell < numberOfCells; cell++){
-				int cellIndexX = 0;
-				int cellIndexY = 0;
-				
-
-				// Assign Index to Incremental Key
-				for(int x = 0; x < Main.GRID_SIZE; x++){
-					for (int y = 0; y < Main.GRID_SIZE; y++){
-						if(incrmBoard[x][y] == cellPos[cell]){
-							cellIndexX = x;
-							cellIndexY = y;
-						}
-					}
-				}
-
-				// Check if cells are occupied.
-				if(puzzle[cellIndexX][cellIndexY] > 0){
-					cellOccupied++;
-					cageActualSum += puzzle[cellIndexX][cellIndexY];
-				}
-			}
-
-			if(cellOccupied == numberOfCells){
-				if(cageActualSum != cageSum){
-					return true;
-				}
-			}
-
-			if(cellOccupied < numberOfCells){
-				if(cageActualSum >= cageSum){
-					return true;
+	private static boolean checkCagesValid(int[][] puzzle, Cage[] cages, int row, int column, int checkNumber, int[][] incrmBoard){
+		int cageToValidate = 0;
+		int cageSum = 0;
+		int cellsOccupied = 0;
+		
+		for(int i = 0; i < cages.length; i++) {
+			for(int j = 0; j < cages[i].numberOfCells; j++) {
+				if(cages[i].cellPos[j] == incrmBoard[row][column]) {
+					cageToValidate = i;
 				}
 			}
 		}
 		
-		return false;
-	}
-
-	private static boolean rowsValid(int[][] puzzle, int row, int checkNumber){
-		for (int i = 0; i < Main.GRID_SIZE; i++){
-			if(puzzle[row][i] == checkNumber){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private static boolean columnsValid(int[][] puzzle, int column, int checkNumber){
-		for (int i = 0; i < Main.GRID_SIZE; i++){
-			if(puzzle[i][column] == checkNumber){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static boolean solvePuzzle(int[][] puzzle, Cage[] cages, int[][] incrmBoard){
-		for (int row = 0; row < Main.GRID_SIZE; row++){
-			for (int column = 0; column < Main.GRID_SIZE; column++){
-				if(puzzle[row][column] == 0){
-					for (int checkNumber = 1; checkNumber <= Main.GRID_SIZE; checkNumber++){
-						checks++;
-						if(checkValid(puzzle, cages, row, column, checkNumber, incrmBoard)){
-							puzzle[row][column] = checkNumber;
-							if(solvePuzzle(puzzle, cages, incrmBoard)){
-								return true;
-							} else {
-								puzzle[row][column] = 0;
-								backtracks++;
-							}
+		for(int i = 0; i < cages[cageToValidate].numberOfCells; i++) {
+			for(int j = 0; j < puzzle.length; j++) {
+				for(int k = 0; k < puzzle.length; k++) {
+					if(incrmBoard[j][k] == cages[cageToValidate].cellPos[i]) {
+						if(j==row && k==column){
+							cageSum += checkNumber;
+							cellsOccupied++;
+						} else if(puzzle[j][k] > 0) {
+							cageSum += puzzle[j][k];
+							cellsOccupied++;
 						}
 					}
-					return false;
 				}
 			}
 		}
+
+		if(cellsOccupied == cages[cageToValidate].numberOfCells){
+			if(cageSum != cages[cageToValidate].cageSum){
+				return false;
+			}
+		}
+
+		if(cellsOccupied < cages[cageToValidate].numberOfCells){
+			if(cageSum >= cages[cageToValidate].cageSum){
+				return false;
+			}
+		}
+		
 		return true;
+	}
+
+	private static boolean checkRowsValid(int[][] puzzle, int row, int checkNumber){
+		for (int i = 0; i < puzzle.length; i++){
+			if(puzzle[row][i] == checkNumber){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static boolean checkColumnsValid(int[][] puzzle, int column, int checkNumber){
+		for (int i = 0; i < puzzle.length; i++){
+			if(puzzle[i][column] == checkNumber){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static void solvePuzzle(int[][] puzzle, Cage[] cages, int[][] incrmBoard, int nextRow, int nextColumn){
+		for (int row = nextRow; row < puzzle.length; row++){
+			for (int column = nextColumn; column < puzzle.length; column++){
+				for (int checkNumber = puzzle[row][column]+1; checkNumber <= puzzle.length+1; checkNumber++) {
+					if(checkNumber!=6) checks++;
+					if(checkValid(puzzle, cages, row, column, checkNumber, incrmBoard) && checkNumber != 6) {
+						puzzle[row][column] = checkNumber;
+						if(column == 4) {
+							nextColumn = 0;
+						} else {
+							nextColumn = column;
+							nextRow = row;
+						}
+						break;
+					} else if(checkNumber >= puzzle.length) {
+						backtracks++;
+						puzzle[row][column] = 0;
+						if(column == 0) {
+							nextColumn = 4;
+							nextRow = row-1;
+						} else {
+							nextColumn = column-1;
+						}
+						solvePuzzle(puzzle, cages, incrmBoard, nextRow, nextColumn);
+						return;
+					}
+				}
+			}
+		}
 	}
 }
